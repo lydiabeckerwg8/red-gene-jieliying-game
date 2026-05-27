@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>红色基因接力营</title>
+  <style>
+    :root {
+      --red: #c6202b;
+      --deep: #7d161b;
+      --gold: #efb544;
+      --cream: #fff4dc;
+      --paper: #fffaf0;
+      --ink: #2c211f;
+      --muted: #716359;
+      --green: #26764d;
+      --blue: #2b628e;
+      --line: rgba(44, 33, 31, 0.14);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(198, 32, 43, 0.18), transparent 34%),
+        linear-gradient(315deg, rgba(239, 181, 68, 0.22), transparent 42%),
+        #f5dec4;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .game {
+      width: min(1220px, 100%);
+      min-height: min(800px, calc(100vh - 36px));
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.22);
+      background: rgba(255, 250, 240, 0.94);
+      box-shadow: 0 24px 70px rgba(92, 45, 33, 0.24);
+    }
+
+    .poster {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border-right: 1px solid rgba(125, 22, 27, 0.16);
+      background:
+        linear-gradient(rgba(255, 244, 220, 0.8), rgba(255, 244, 220, 0.8)),
+        url("data:image/svg+xml,%3Csvg width='640' height='900' viewBox='0 0 640 900' xmlns='http://www.w3.org/2000/svg'%3E%3Crect fill='%23ecd0ad' width='640' height='900'/%3E%3Cg fill='none' stroke='%23c6202b' stroke-opacity='.18' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M-28 730 C94 628 190 782 306 662 S522 552 670 682'/%3E%3Cpath d='M-18 272 C102 152 202 314 330 186 S536 78 670 178'/%3E%3Cpath d='M72 482 C152 382 244 514 338 410 S510 338 612 410'/%3E%3C/g%3E%3Cg fill='%237d161b' fill-opacity='.12'%3E%3Ccircle cx='110' cy='132' r='62'/%3E%3Ccircle cx='522' cy='412' r='82'/%3E%3Ccircle cx='156' cy='622' r='42'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 62px;
+      height: 62px;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 10px 16px rgba(125, 22, 27, 0.18));
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--deep);
+      font-size: clamp(32px, 4.2vw, 54px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 10px 0 0;
+      color: #5f5046;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .art-card {
+      aspect-ratio: 4 / 3;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.18);
+      background: #fffaf0;
+      overflow: hidden;
+      box-shadow: 0 18px 34px rgba(92, 45, 33, 0.12);
+    }
+
+    .art-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      object-position: center;
+      background: #f0dec6;
+    }
+
+    .route-title,
+    .passport-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--deep);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .route-title span,
+    .passport-title span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mission-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: rgba(255, 250, 240, 0.76);
+    }
+
+    .mission-grid::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 2px dashed rgba(198, 32, 43, 0.2);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .mission-dot {
+      position: relative;
+      z-index: 1;
+      min-height: 56px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.92);
+      color: var(--muted);
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .mission-dot b,
+    .mission-dot small {
+      display: block;
+    }
+
+    .mission-dot b {
+      color: inherit;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .mission-dot small {
+      margin-top: 6px;
+      max-width: 100%;
+      overflow: hidden;
+      color: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mission-dot.active {
+      background: var(--red);
+      color: white;
+      border-color: rgba(125, 22, 27, 0.3);
+      box-shadow: 0 10px 20px rgba(198, 32, 43, 0.22);
+    }
+
+    .mission-dot.done {
+      background: #e6f5e8;
+      color: var(--green);
+      border-color: rgba(38, 118, 77, 0.34);
+    }
+
+    .mission-dot.locked {
+      opacity: 0.52;
+      cursor: not-allowed;
+    }
+
+    .passport {
+      display: grid;
+      gap: 10px;
+      margin-top: auto;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: rgba(255, 253, 248, 0.82);
+    }
+
+    .collectibles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .collectible {
+      min-height: 44px;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.14);
+      background: #f3dfbd;
+      padding: 8px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .collectible.unlocked {
+      background: #fff5df;
+      color: var(--deep);
+      border-color: rgba(239, 181, 68, 0.75);
+      box-shadow: inset 4px 0 0 var(--gold);
+    }
+
+    .play {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 74px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+      padding: 12px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .stat b {
+      display: block;
+      margin-top: 8px;
+      color: var(--deep);
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: #ead9c2;
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      transition: width 0.25s ease;
+    }
+
+    .story-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background:
+        linear-gradient(90deg, rgba(198, 32, 43, 0.08), rgba(239, 181, 68, 0.12)),
+        #fffdf8;
+      padding: 14px 16px;
+    }
+
+    .story-kicker {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .story-panel b {
+      display: block;
+      color: var(--deep);
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .story-panel p {
+      margin: 6px 0 0;
+      color: #564940;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .toolkit {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      max-width: 240px;
+    }
+
+    .tool {
+      min-height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: #fff5df;
+      padding: 0 10px;
+      color: var(--deep);
+      font-size: 12px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .card {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+      padding: 18px;
+      box-shadow: 0 12px 28px rgba(92, 45, 33, 0.08);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #fff0d2;
+      border: 1px solid rgba(239, 181, 68, 0.78);
+      color: var(--deep);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .mission-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mission-meta span {
+      min-height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: #fff5df;
+      padding: 0 10px;
+      color: #65564d;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    h2 {
+      margin: 12px 0 10px;
+      font-size: 25px;
+      line-height: 1.36;
+      letter-spacing: 0;
+    }
+
+    .explain {
+      margin: 0;
+      color: #564940;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .question {
+      margin: 0 0 14px;
+      color: var(--deep);
+      font-size: 21px;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    .task {
+      display: grid;
+      gap: 10px;
+    }
+
+    button { font: inherit; }
+
+    .choice,
+    .chip,
+    .primary,
+    .secondary {
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: #fff5df;
+      text-align: left;
+      padding: 13px 14px;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .choice:hover,
+    .chip:hover,
+    .primary:hover,
+    .secondary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(92, 45, 33, 0.13);
+    }
+
+    .choice.correct,
+    .chip.selected.good {
+      background: #e7f7e8;
+      border-color: rgba(38, 118, 77, 0.5);
+    }
+
+    .choice.wrong,
+    .chip.selected.bad {
+      background: #ffe7e3;
+      border-color: rgba(198, 32, 43, 0.45);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      min-height: 40px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: #fff5df;
+      padding: 0 12px;
+      color: #3d322e;
+      font-weight: 800;
+    }
+
+    .chip.selected {
+      background: #fff0d2;
+      border-color: rgba(239, 181, 68, 0.9);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .time-item {
+      display: grid;
+      grid-template-columns: 76px 1fr 84px;
+      gap: 10px;
+      align-items: center;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.16);
+      background: #fff5df;
+      padding: 10px;
+      min-height: 58px;
+    }
+
+    .time-item b {
+      color: var(--deep);
+      font-size: 15px;
+    }
+
+    .time-item.no-year {
+      grid-template-columns: 1fr 84px;
+    }
+
+    .time-item span {
+      line-height: 1.55;
+    }
+
+    .time-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .mini-btn {
+      min-width: 34px;
+      min-height: 32px;
+      border: 0;
+      border-radius: 8px;
+      background: #f3dfbd;
+      color: var(--deep);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .feedback {
+      min-height: 92px;
+      border-radius: 8px;
+      border: 1px dashed rgba(125, 22, 27, 0.25);
+      background: #fff4dc;
+      padding: 14px;
+      color: #55453d;
+      line-height: 1.75;
+    }
+
+    .feedback strong {
+      color: var(--deep);
+    }
+
+    .feedback .analysis-line {
+      margin-top: 6px;
+    }
+
+    .reward-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .reward-line span {
+      border-radius: 999px;
+      background: #fffdf8;
+      border: 1px solid rgba(239, 181, 68, 0.8);
+      color: var(--deep);
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: auto;
+      align-items: center;
+    }
+
+    .primary,
+    .secondary {
+      width: 104px;
+      height: 44px;
+      border: 0;
+      padding: 0 18px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .primary {
+      color: white;
+      background: var(--red);
+    }
+
+    .primary:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .secondary {
+      color: var(--deep);
+      background: #fff5df;
+      border: 1px solid rgba(125, 22, 27, 0.2);
+    }
+
+    .ending {
+      display: none;
+    }
+
+    .ending.show {
+      display: block;
+    }
+
+    .ending-prizes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .ending-prize {
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.14);
+      background: #fff5df;
+      padding: 12px;
+      color: var(--deep);
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.45;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 20;
+      max-width: min(340px, calc(100vw - 48px));
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 22, 27, 0.18);
+      background: #fffdf8;
+      box-shadow: 0 18px 42px rgba(92, 45, 33, 0.24);
+      padding: 14px 16px;
+      color: var(--deep);
+      font-weight: 900;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 960px) {
+      body { padding: 0; }
+      .game {
+        grid-template-columns: 1fr;
+        min-height: 100vh;
+        border-radius: 0;
+      }
+      .poster {
+        border-right: 0;
+        border-bottom: 1px solid rgba(125, 22, 27, 0.16);
+        padding: 22px;
+      }
+      .play { padding: 20px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mission-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .story-panel { grid-template-columns: 1fr; }
+      .toolkit { justify-content: flex-start; max-width: none; }
+      .ending-prizes { grid-template-columns: 1fr; }
+      h2 { font-size: 22px; }
+      .question { font-size: 19px; }
+      .time-item { grid-template-columns: 68px 1fr; }
+      .time-item.no-year { grid-template-columns: 1fr; }
+      .time-actions { grid-column: 1 / -1; justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game" aria-label="红色基因接力营小游戏">
+    <section class="poster">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="#c6202b" />
+          <path d="M50 14l9.5 21 22.9 2.5-17 15.8 4.7 22.6L50 64.6 29.9 75.9l4.7-22.6-17-15.8 22.9-2.5L50 14z" fill="#efb544" />
+        </svg>
+        <div>
+          <h1>红色基因接力营</h1>
+          <p class="lead">沿着红色研学路线闯关，收集精神火种、点亮地标卡片，最终生成属于自己的红色基因接力宣言。</p>
+        </div>
+      </div>
+
+      <div class="art-card" id="art"></div>
+      <div class="route-title">研学路线图 <span id="routeHint">点亮 20 个任务节点</span></div>
+      <div class="mission-grid" id="missionGrid"></div>
+      <div class="passport">
+        <div class="passport-title">研学护照 <span id="passportText">等待点亮</span></div>
+        <div class="collectibles" id="collectibles"></div>
+      </div>
+    </section>
+
+    <section class="play">
+      <div class="stats">
+        <div class="stat"><span>当前题目</span><b id="levelText">1/20</b></div>
+        <div class="stat"><span>百分制</span><b id="percentText">0</b></div>
+        <div class="stat"><span>精神火种</span><b id="scoreText">0</b></div>
+        <div class="stat"><span>已点亮</span><b id="badgeText">0</b></div>
+      </div>
+      <div class="progress" aria-label="闯关进度"><span id="progressBar"></span></div>
+
+      <section class="story-panel" aria-label="当前研学任务">
+        <div>
+          <p class="story-kicker">接力任务</p>
+          <b id="storyTitle">准备出发</b>
+          <p id="storyText">从红色地标和人物故事中收集线索，把知识点转化为行动宣言。</p>
+        </div>
+        <div class="toolkit" id="toolkit"></div>
+      </section>
+
+      <article class="card" id="introCard">
+        <span class="tag" id="tagText"></span>
+        <h2 id="titleText"></h2>
+        <p class="explain" id="explainText"></p>
+        <div class="mission-meta" id="missionMeta"></div>
+      </article>
+
+      <section class="card" id="taskCard">
+        <h3 class="question" id="questionText"></h3>
+        <div class="task" id="task"></div>
+      </section>
+
+      <div class="feedback" id="feedback">先观察图片与文字，再完成当前题目。答错也会获得讲解。</div>
+
+      <article class="card ending" id="ending">
+        <span class="tag">课堂汇报总结</span>
+        <h2>游戏策划说明</h2>
+        <p class="explain" id="endingText"></p>
+        <div class="ending-prizes" id="endingPrizes"></div>
+      </article>
+
+      <div class="actions">
+        <button class="primary" id="checkBtn">提交答案</button>
+        <button class="primary" id="nextBtn" disabled>下一题</button>
+        <button class="secondary" id="restartBtn">重新开始</button>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const fileUrl = name => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(name)}`;
+    const photos = {
+      p1: { url: fileUrl("李大钊故居展品.jpg"), label: "李大钊故居展品" },
+      p2: { url: fileUrl("嘉兴南湖红船2021 (1).jpg"), label: "浙江嘉兴南湖红船" },
+      p3: { url: fileUrl("1989 CPA 6111.jpg"), label: "李大钊纪念邮票图像" },
+      p4: { url: fileUrl("ZunyiMeeting.jpg"), label: "遵义会议会址" },
+      p5: { url: fileUrl("中共一大会址正面2021 (2).jpg"), label: "中共一大会址" },
+      p6: { url: fileUrl("宝塔山看延安市 2.jpg"), label: "延安宝塔山" },
+      p7: { url: fileUrl("1963-04 1963年 雷锋.jpg"), label: "雷锋资料照片" },
+      p8: { url: fileUrl("Xibaipo Memorial Hall (20240609100945).jpg"), label: "西柏坡纪念馆" },
+      p9: { url: fileUrl("Site of the First National Congress of the Communist Party of China.jpg"), fallbacks: [fileUrl("中共一大会址正面2021 (2).jpg")], label: "中共一大会址纪念地" },
+      p10: { url: fileUrl("20260129 Memorial Park of Jiao Yulu 03.jpg"), label: "焦裕禄纪念园" },
+      p11: { url: fileUrl("李大钊故居庭院.jpg"), label: "李大钊故居庭院" },
+      p12: { url: fileUrl("Wuzhi Peak, Jinggangshan (20250124122509).jpg"), label: "井冈山五指峰" },
+      p13: { url: fileUrl("西南联大博物馆-邓稼先雕像.jpg"), label: "邓稼先纪念雕像" },
+      p14: { url: fileUrl("Luding_bridge.jpg"), fallbacks: [fileUrl("Luding Bridge-1.jpg"), fileUrl("泸定桥 - panoramio.jpg")], label: "泸定桥" },
+      p15: { url: fileUrl("Deng_Xiaoping_statue_in_Shenzhen.JPG"), fallbacks: [fileUrl("Dengxiaoping lianhuashan.JPG")], label: "深圳莲花山邓小平铜像" },
+      p16: { url: fileUrl("革命聖地西柏坡紀念碑 20130401.jpg"), fallbacks: [fileUrl("Xibaipuo1.jpg"), fileUrl("Xibaipuo2.jpg"), fileUrl("西柏坡紀念館 - panoramio.jpg")], label: "西柏坡红色纪念地" },
+      p17: { url: fileUrl("1966-07 大庆铁人王进喜.jpg"), fallbacks: [fileUrl("石油附中王进喜雕像.jpg"), fileUrl("Iron Man Wang Jinxi.jpg")], label: "王进喜资料照片" },
+      p18: { url: fileUrl("Fangzhimin1.jpg"), fallbacks: [fileUrl("Fangzhimin2.JPG"), fileUrl("1965-9 1965 方志敏 可爱的中国 手稿.jpg")], label: "方志敏资料照片" },
+      p19: { url: fileUrl("20260129 Memorial Park of Jiao Yulu 01.jpg"), label: "焦裕禄纪念园景观" },
+      p20: { url: fileUrl("“新中國從這裡走來”羣雕 - panoramio.jpg"), fallbacks: [fileUrl("Xibaipo Memorial Hall (20240609100945).jpg")], label: "西柏坡主题群雕" }
+    };
+
+    const missions = [
+      { scene: "book", photo: "p1", category: "名词辨析", title: "红色基因的核心内涵", intro: "红色基因蕴含理想信念、人民立场、艰苦奋斗和实事求是等精神品质。", type: "multi", q: "选出真正体现红色基因内涵的表述。", analysis: "这类题考查的不是机械背词，而是能否抓住红色基因的价值结构。理想信念回答方向问题，服务人民回答立场问题，艰苦奋斗回答作风问题，实事求是回答方法问题。把这些关键词连起来，才能说明红色基因为什么能够跨越历史时期持续发挥精神力量。", options: [
+        { text: "坚定理想信念", good: true }, { text: "服务人民", good: true }, { text: "艰苦奋斗", good: true }, { text: "只追求个人名利", good: false }, { text: "实事求是", good: true }, { text: "遇到困难就退缩", good: false }
+      ], minGood: 4, note: "红色基因不是标签，而是价值追求与实践品格的统一。" },
+      { scene: "boat", photo: "p2", category: "红色遗址", title: "南湖红船", intro: "红船精神常被概括为开天辟地、敢为人先的首创精神，坚定理想、百折不挠的奋斗精神，立党为公、忠诚为民的奉献精神。", type: "choice", q: "这幅图所指向的红色地标与哪一事件关系最密切？", options: ["中共一大相关历史记忆", "遵义会议", "西柏坡会议", "辽沈战役"], answer: 0, note: "南湖红船承载着中国共产党诞生的重要历史记忆。", analysis: "南湖红船之所以适合做红色遗址识别题，是因为它把一个具体空间和重大历史起点连接起来。答题时不仅要识别地点，更要说明它象征着开天辟地、敢为人先和忠诚为民的精神。课堂讲解时可以把“红船”作为红色基因从历史记忆转化为价值认同的例子。" },
+      { scene: "person", photo: "p3", category: "人物竞猜", title: "中国共产主义运动先驱", intro: "通过人物事迹理解精神品质，是红色基因传播的重要方式。", type: "choice", q: "线索：参与创建中国共产党，是中国共产主义运动的先驱之一，曾写下“试看将来的环球，必是赤旗的世界”。他是？", options: ["李大钊", "焦裕禄", "雷锋", "钱学森"], answer: 0, note: "李大钊的事迹启示青年把个人理想融入民族复兴。", analysis: "人物竞猜的重点不是只猜出姓名，而是从线索中提炼精神品质。李大钊代表的是坚定信仰、追求真理和启发青年的力量。把他的事迹放进红色基因传播中，可以引导同学理解理想信念不是抽象概念，而是能推动行动选择的精神坐标。" },
+      { scene: "site", photo: "p4", category: "红色遗址", title: "遵义会议", intro: "遵义会议是党的历史上一个生死攸关的转折点。", type: "choice", q: "遵义会议最适合作为哪一主题的红色研学案例？", options: ["实事求是与独立自主", "古代科举制度", "海上丝绸之路", "传统节气文化"], answer: 0, note: "遵义会议体现了把马克思主义基本原理同中国具体实际相结合的探索。" },
+      { scene: "book", photo: "p5", category: "名词辨析", title: "实事求是", intro: "实事求是要求从客观实际出发，在实践中检验和发展认识。", type: "choice", q: "下面哪种做法更符合“实事求是”？", options: ["先下结论再找材料", "根据调查研究修正方案", "只凭口号解决问题", "遇到复杂问题就回避"], answer: 1, note: "实事求是强调调查研究、尊重事实和实践检验。" },
+      { scene: "pagoda", photo: "p6", category: "红色遗址", title: "延安精神", intro: "延安是中国革命圣地之一，延安精神包含坚定正确的政治方向、解放思想实事求是、全心全意为人民服务、自力更生艰苦奋斗。", type: "multi", q: "选出与延安精神关联较强的表述。", options: [
+        { text: "自力更生", good: true }, { text: "艰苦奋斗", good: true }, { text: "全心全意为人民服务", good: true }, { text: "脱离群众", good: false }, { text: "实事求是", good: true }, { text: "形式主义", good: false }
+      ], minGood: 4, note: "延安精神强调方向、作风、群众立场与奋斗品质。" },
+      { scene: "person", photo: "p7", category: "人物竞猜", title: "为人民服务", intro: "红色基因既体现在重大历史转折中，也体现在普通岗位的奉献中。", type: "choice", q: "线索：他的名字常与“全心全意为人民服务”的精神相联系，留下“把有限的生命投入到无限的为人民服务之中”的精神启示。他是？", options: ["雷锋", "杨靖宇", "邓稼先", "方志敏"], answer: 0, note: "雷锋精神强调服务人民、助人为乐和岗位奉献。" },
+      { scene: "timeline", photo: "p8", category: "足迹排序", title: "重要历史节点", intro: "把历史事件放回时间脉络，才能更好理解红色基因的形成与发展。", type: "timeline", hideYear: true, q: "将下列事件按时间先后排序。", items: [
+        { year: "1921", text: "中国共产党成立" }, { year: "1935", text: "遵义会议召开" }, { year: "1949", text: "中华人民共和国成立" }, { year: "1978", text: "党的十一届三中全会召开" }
+      ], order: [2, 0, 3, 1], note: "正确顺序是 1921、1935、1949、1978。" },
+      { scene: "book", photo: "p9", category: "名词辨析", title: "初心使命", intro: "初心使命回答“为了谁、依靠谁、我是谁”的根本问题。", type: "choice", q: "“为中国人民谋幸福、为中华民族谋复兴”最集中体现的是？", options: ["初心使命", "个人功利", "形式主义", "短期投机"], answer: 0, note: "初心使命是理解红色基因的重要关键词。" },
+      { scene: "person", photo: "p10", category: "人物竞猜", title: "县委书记的榜样", intro: "红色基因也体现在基层治理和为民担当中。", type: "choice", q: "线索：在兰考治理风沙、内涝、盐碱，被誉为“县委书记的榜样”。他是？", options: ["焦裕禄", "王进喜", "黄继光", "刘胡兰"], answer: 0, note: "焦裕禄精神体现亲民爱民、艰苦奋斗、科学求实、迎难而上。" },
+      { scene: "book", photo: "p11", category: "名词辨析", title: "群众路线", intro: "群众路线强调一切为了群众、一切依靠群众，从群众中来，到群众中去。", type: "choice", q: "下面哪项更符合群众路线？", options: ["关起门来替群众做决定", "深入调研，倾听群众意见并解决实际问题", "只看材料不看现场", "把群众需求当作负担"], answer: 1, note: "群众路线要求把人民立场落实到调查、决策和行动中。" },
+      { scene: "boat", photo: "p12", category: "红色遗址", title: "井冈山道路", intro: "井冈山根据地探索出把马克思主义基本原理同中国革命具体实际相结合的道路。", type: "choice", q: "井冈山精神中，哪一组表述更准确？", options: ["坚定信念、艰苦奋斗、实事求是、敢闯新路、依靠群众", "追求享乐、脱离群众、照搬经验", "只重口号、不重实践", "个人英雄主义压倒集体"], answer: 0, note: "井冈山精神强调信念、实践探索和群众基础。" },
+      { scene: "person", photo: "p13", category: "人物竞猜", title: "两弹一星精神", intro: "红色基因在科技报国中也有鲜明体现。", type: "choice", q: "线索：他被誉为“两弹元勋”，长期隐姓埋名投身国防科技事业。他是？", options: ["邓稼先", "李四光", "竺可桢", "华罗庚"], answer: 0, note: "邓稼先体现热爱祖国、无私奉献、自力更生、勇攀高峰的精神。" },
+      { scene: "book", photo: "p14", category: "名词辨析", title: "红色精神谱系", intro: "红色精神谱系由不同历史时期的精神共同构成，既一脉相承又不断发展。", type: "multi", q: "下列哪些属于常见的红色精神或红色精神相关表达？", options: [
+        { text: "长征精神", good: true }, { text: "抗美援朝精神", good: true }, { text: "脱贫攻坚精神", good: true }, { text: "逃避责任", good: false }, { text: "载人航天精神", good: true }, { text: "历史虚无主义", good: false }
+      ], minGood: 4, note: "红色精神谱系在革命、建设、改革和新时代实践中不断丰富。" },
+      { scene: "timeline", photo: "p15", category: "足迹排序", title: "红色精神形成脉络", intro: "难度升级：不仅看年份，还要理解不同时期的精神主题。", type: "timeline", q: "将下列精神或事件按大致历史先后排序。", items: [
+        { year: "革命", text: "长征精神" }, { year: "建设", text: "大庆精神" }, { year: "改革", text: "特区精神" }, { year: "新时代", text: "脱贫攻坚精神" }
+      ], order: [2, 0, 3, 1], note: "大致顺序是长征精神、大庆精神、特区精神、脱贫攻坚精神。" },
+      { scene: "site", photo: "p16", category: "红色遗址", title: "西柏坡精神", intro: "西柏坡见证了党领导人民夺取全国胜利的重要历程，也提醒人们保持“赶考”的清醒。", type: "choice", q: "“两个务必”主要提醒党员干部保持什么作风？", options: ["谦虚谨慎、艰苦奋斗", "奢靡享乐、脱离群众", "只重形式、不重实效", "盲目自满、停止学习"], answer: 0, note: "“两个务必”强调谦虚谨慎、不骄不躁和艰苦奋斗。" },
+      { scene: "person", photo: "p17", category: "人物竞猜", title: "铁人精神", intro: "社会主义建设时期也形成了具有鲜明时代特征的红色精神。", type: "choice", q: "线索：“宁可少活二十年，拼命也要拿下大油田”常与哪位模范人物相关？", options: ["王进喜", "张思德", "赵一曼", "杨根思"], answer: 0, note: "王进喜代表的铁人精神体现爱国、创业、求实、奉献。" },
+      { scene: "book", photo: "p18", category: "名词辨析", title: "历史虚无主义辨析", intro: "难度升级：传播红色基因也要能辨别错误历史观。", type: "choice", q: "下列哪种观点属于需要警惕的错误倾向？", options: ["尊重史实、结合材料分析历史", "用片面材料否定革命历史和英雄人物", "从历史经验中汲取前进力量", "把个人命运放入时代背景理解"], answer: 1, note: "片面否定革命历史和英雄人物，不利于正确理解红色基因。" },
+      { scene: "pagoda", photo: "p19", category: "综合判断", title: "红色研学设计", intro: "真正的趣味思政，需要把知识、情感和行动连接起来。", type: "choice", q: "如果设计一次红色研学活动，哪种方案最完整？", options: ["只拍照打卡，不做讲解", "遗址参观、史料阅读、人物故事、实践任务和反思分享结合", "只背诵年份", "只做选择题不联系现实"], answer: 1, note: "好的红色研学要实现历史理解、价值认同和实践转化。" },
+      { scene: "timeline", photo: "p20", category: "综合挑战", title: "红色基因如何传播", intro: "最后一题要求把概念理解转化为表达能力。", type: "multi", q: "面向同学传播红色基因，哪些做法更有效？", options: [
+        { text: "用故事讲人物精神", good: true }, { text: "结合遗址图片和地图", good: true }, { text: "设计互动任务和即时反馈", good: true }, { text: "只堆砌大段口号", good: false }, { text: "联系现实中的责任担当", good: true }, { text: "忽视史实准确性", good: false }
+      ], minGood: 4, note: "红色基因传播要兼顾史实、情感、互动和现实意义。" }
+    ];
+
+    const routeStations = [
+      "启程", "南湖", "先驱", "遵义", "求是", "延安", "服务", "脉络", "初心", "兰考",
+      "群众", "井冈山", "科技", "谱系", "形成", "西柏坡", "大庆", "辨析", "研学", "宣言"
+    ];
+
+    const missionModes = {
+      choice: { name: "线索判断", tool: "观察图片，锁定关键词" },
+      multi: { name: "精神采集", tool: "筛选正确品质，避开干扰项" },
+      timeline: { name: "路线复原", tool: "拖动顺序，理清历史脉络" }
+    };
+
+    const categoryPrizes = {
+      "名词辨析": "概念辨析卡",
+      "红色遗址": "地标讲解卡",
+      "人物竞猜": "人物精神卡",
+      "足迹排序": "时间线卡",
+      "综合判断": "研学策划卡",
+      "综合挑战": "接力宣言卡"
+    };
+
+    const categoryPrompts = {
+      "名词辨析": "本关要把口号背后的价值结构讲清楚。",
+      "红色遗址": "本关要从真实地点进入历史现场。",
+      "人物竞猜": "本关要从人物线索中读出精神品质。",
+      "足迹排序": "本关要把事件放回历史脉络。",
+      "综合判断": "本关要把知识、情感和行动连起来。",
+      "综合挑战": "最后把理解转化成传播方案。"
+    };
+
+    let index = 0;
+    let rawScore = 0;
+    let selected = new Set();
+    let answered = false;
+    let timelineOrder = [];
+    const done = new Set();
+    const unlockedPrizes = new Set();
+    const answers = Array(missions.length).fill(null);
+
+    const art = document.querySelector("#art");
+    const missionGrid = document.querySelector("#missionGrid");
+    const levelText = document.querySelector("#levelText");
+    const percentText = document.querySelector("#percentText");
+    const scoreText = document.querySelector("#scoreText");
+    const badgeText = document.querySelector("#badgeText");
+    const progressBar = document.querySelector("#progressBar");
+    const tagText = document.querySelector("#tagText");
+    const titleText = document.querySelector("#titleText");
+    const explainText = document.querySelector("#explainText");
+    const questionText = document.querySelector("#questionText");
+    const task = document.querySelector("#task");
+    const feedback = document.querySelector("#feedback");
+    const checkBtn = document.querySelector("#checkBtn");
+    const nextBtn = document.querySelector("#nextBtn");
+    const restartBtn = document.querySelector("#restartBtn");
+    const introCard = document.querySelector("#introCard");
+    const taskCard = document.querySelector("#taskCard");
+    const ending = document.querySelector("#ending");
+    const endingText = document.querySelector("#endingText");
+    const endingPrizes = document.querySelector("#endingPrizes");
+    const storyTitle = document.querySelector("#storyTitle");
+    const storyText = document.querySelector("#storyText");
+    const toolkit = document.querySelector("#toolkit");
+    const missionMeta = document.querySelector("#missionMeta");
+    const collectibles = document.querySelector("#collectibles");
+    const passportText = document.querySelector("#passportText");
+    const routeHint = document.querySelector("#routeHint");
+    const toast = document.querySelector("#toast");
+
+    function percent() {
+      return Math.round((rawScore / (missions.length * 10)) * 100);
+    }
+
+    function levelName(value) {
+      if (value >= 90) return "优秀传播员";
+      if (value >= 75) return "进阶传播员";
+      if (value >= 60) return "合格传播员";
+      return "继续加油";
+    }
+
+    function getMissionReward(mission) {
+      return categoryPrizes[mission.category] || "研学线索卡";
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function renderCollectibles() {
+      const allPrizes = [...new Set(Object.values(categoryPrizes))];
+      collectibles.innerHTML = allPrizes.map(prize => `
+        <div class="collectible ${unlockedPrizes.has(prize) ? "unlocked" : ""}">${prize}</div>
+      `).join("");
+      passportText.textContent = `已收集 ${unlockedPrizes.size}/${allPrizes.length}`;
+    }
+
+    function updateStats() {
+      levelText.textContent = `${Math.min(index + 1, missions.length)}/${missions.length}`;
+      percentText.textContent = percent();
+      scoreText.textContent = rawScore;
+      badgeText.textContent = done.size;
+      progressBar.style.width = `${done.size / missions.length * 100}%`;
+      routeHint.textContent = `已点亮 ${done.size}/${missions.length} 个任务节点`;
+      missionGrid.innerHTML = missions.map((mission, i) => {
+        const unlocked = i <= done.size;
+        return `
+        <button class="mission-dot ${i === index ? "active" : ""} ${done.has(i) ? "done" : ""} ${unlocked ? "" : "locked"}" data-index="${i}" aria-label="第${i + 1}站 ${mission.title}" ${unlocked ? "" : "disabled"}>
+          <b>${String(i + 1).padStart(2, "0")}</b>
+          <small>${routeStations[i] || mission.title}</small>
+        </button>
+      `;
+      }).join("");
+      missionGrid.querySelectorAll(".mission-dot").forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.disabled) return;
+          index = Number(button.dataset.index);
+          renderMission();
+        });
+      });
+      renderCollectibles();
+    }
+
+    function award(points, message, extra = {}) {
+      const mission = missions[index];
+      const reward = getMissionReward(mission);
+      const wasUnlocked = unlockedPrizes.has(reward);
+      const previous = answers[index];
+      if (previous) rawScore -= previous.points;
+      rawScore += points;
+      answers[index] = { points, message, reward, ...extra };
+      done.add(index);
+      unlockedPrizes.add(reward);
+      answered = true;
+      feedback.innerHTML = `${message}<div class="reward-line"><span>精神火种 +${points}</span><span>${reward}</span><span>${done.size}/${missions.length} 站已点亮</span></div>`;
+      checkBtn.disabled = true;
+      nextBtn.disabled = false;
+      updateStats();
+      showToast(wasUnlocked ? `精神火种 +${points}，任务节点已点亮` : `获得新卡片：${reward}`);
+    }
+
+    function richAnalysis(mission, resultText) {
+      const correctText = mission.type === "choice" ? `正确答案：${mission.options[mission.answer]}。` : "";
+      const background = mission.note;
+      const deeper = mission.analysis || `${mission.title}这一题的关键，是把具体史实、人物事迹或红色遗址同精神内涵联系起来。红色基因并不只是历史知识点，它体现为理想信念、人民立场、实事求是、艰苦奋斗和责任担当等价值追求。`;
+      const action = "现实启示：学习红色基因不能停留在记住名称和年份，还要思考它如何转化为今天的学习态度、集体责任、服务意识和解决实际问题的行动。";
+      return `
+        <strong>${resultText}</strong>${correctText}
+        <div class="analysis-line">${background}</div>
+        <div class="analysis-line">${deeper}</div>
+        <div class="analysis-line">${action}</div>
+      `;
+    }
+
+    function renderPhoto(photo) {
+      const img = document.createElement("img");
+      img.src = photo.url;
+      img.alt = photo.label;
+      img.referrerPolicy = "no-referrer";
+      img.dataset.fallbacks = JSON.stringify(photo.fallbacks || []);
+      img.dataset.fallbackIndex = "0";
+      img.addEventListener("error", () => {
+        const fallbacks = JSON.parse(img.dataset.fallbacks || "[]");
+        const fallbackIndex = Number(img.dataset.fallbackIndex || "0");
+        if (fallbackIndex < fallbacks.length) {
+          img.dataset.fallbackIndex = String(fallbackIndex + 1);
+          img.src = fallbacks[fallbackIndex];
+        }
+      });
+      art.replaceChildren(img);
+    }
+
+    function renderChoice(mission) {
+      mission.options.forEach((option, optionIndex) => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.textContent = option;
+        button.addEventListener("click", () => {
+          if (answered) return;
+          document.querySelectorAll(".choice").forEach((item, i) => {
+            item.disabled = true;
+            if (i === mission.answer) item.classList.add("correct");
+            if (i === optionIndex && i !== mission.answer) item.classList.add("wrong");
+          });
+          if (optionIndex === mission.answer) {
+            award(10, richAnalysis(mission, "回答正确。"), { selectedChoice: optionIndex });
+          } else {
+            award(4, richAnalysis(mission, "再辨析一下。"), { selectedChoice: optionIndex });
+          }
+        });
+        task.appendChild(button);
+      });
+      checkBtn.textContent = "阅读提示";
+      checkBtn.disabled = true;
+    }
+
+    function renderMulti(mission) {
+      const box = document.createElement("div");
+      box.className = "chips";
+      mission.options.forEach((option, optionIndex) => {
+        const button = document.createElement("button");
+        button.className = "chip";
+        button.textContent = option.text;
+        button.addEventListener("click", () => {
+          if (answered) return;
+          selected.has(optionIndex) ? selected.delete(optionIndex) : selected.add(optionIndex);
+          button.classList.toggle("selected");
+        });
+        box.appendChild(button);
+      });
+      task.appendChild(box);
+      const hint = document.createElement("p");
+      hint.className = "explain";
+      hint.textContent = `请选择至少 ${mission.minGood} 个正确项，注意区分“精神内涵”和“错误倾向”。`;
+      task.appendChild(hint);
+      checkBtn.textContent = "提交辨析";
+      checkBtn.disabled = false;
+    }
+
+    function renderTimeline(mission) {
+      timelineOrder = answers[index]?.timelineOrder ? [...answers[index].timelineOrder] : [...mission.order];
+      checkBtn.textContent = "提交排序";
+      checkBtn.disabled = false;
+      drawTimeline(mission);
+    }
+
+    function drawTimeline(mission) {
+      task.innerHTML = `<div class="timeline"></div>`;
+      const list = task.querySelector(".timeline");
+      timelineOrder.forEach((itemIndex, position) => {
+        const item = mission.items[itemIndex];
+        const row = document.createElement("div");
+        row.className = `time-item ${mission.hideYear ? "no-year" : ""}`;
+        row.innerHTML = mission.hideYear ? `
+          <span>${item.text}</span>
+          <div class="time-actions">
+            <button class="mini-btn" ${position === 0 ? "disabled" : ""} data-position="${position}" data-move="-1">↑</button>
+            <button class="mini-btn" ${position === timelineOrder.length - 1 ? "disabled" : ""} data-position="${position}" data-move="1">↓</button>
+          </div>
+        ` : `
+          <b>${item.year}</b>
+          <span>${item.text}</span>
+          <div class="time-actions">
+            <button class="mini-btn" ${position === 0 ? "disabled" : ""} data-position="${position}" data-move="-1">↑</button>
+            <button class="mini-btn" ${position === timelineOrder.length - 1 ? "disabled" : ""} data-position="${position}" data-move="1">↓</button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+      list.querySelectorAll(".mini-btn").forEach(button => {
+        button.addEventListener("click", () => {
+          if (answered) return;
+          const pos = Number(button.dataset.position);
+          const target = pos + Number(button.dataset.move);
+          [timelineOrder[pos], timelineOrder[target]] = [timelineOrder[target], timelineOrder[pos]];
+          drawTimeline(mission);
+        });
+      });
+    }
+
+    function checkCurrent() {
+      if (answered) return;
+      const mission = missions[index];
+      if (mission.type === "multi") {
+        const chosen = [...selected].map(i => mission.options[i]);
+        const goodCount = chosen.filter(item => item.good).length;
+        const badCount = chosen.filter(item => !item.good).length;
+        document.querySelectorAll(".chip").forEach((button, i) => {
+          if (selected.has(i)) button.classList.add(mission.options[i].good ? "good" : "bad");
+          button.disabled = true;
+        });
+        if (goodCount >= mission.minGood && badCount === 0) {
+          award(10, richAnalysis(mission, "辨析准确。"), { selectedMulti: [...selected] });
+        } else {
+          award(5, richAnalysis(mission, "有一定判断，但还不够严谨。"), { selectedMulti: [...selected] });
+        }
+      }
+
+      if (mission.type === "timeline") {
+        const correct = timelineOrder.every((itemIndex, pos) => itemIndex === pos);
+        document.querySelectorAll(".mini-btn").forEach(button => button.disabled = true);
+        if (correct) {
+          award(10, richAnalysis(mission, "排序正确。"), { timelineOrder: [...timelineOrder] });
+        } else {
+          award(5, richAnalysis(mission, "顺序还需梳理。"), { timelineOrder: [...timelineOrder] });
+        }
+      }
+    }
+
+    function restoreAnsweredState(mission) {
+      const saved = answers[index];
+      if (!saved) return;
+      answered = true;
+      feedback.innerHTML = `${saved.message}<div class="reward-line"><span>精神火种 +${saved.points}</span><span>${saved.reward || getMissionReward(mission)}</span><span>已完成回看</span></div>`;
+      checkBtn.disabled = true;
+
+      if (mission.type === "choice") {
+        document.querySelectorAll(".choice").forEach((button, i) => {
+          button.disabled = true;
+          if (i === mission.answer) button.classList.add("correct");
+          if (i === saved.selectedChoice && i !== mission.answer) button.classList.add("wrong");
+        });
+      }
+
+      if (mission.type === "multi") {
+        document.querySelectorAll(".chip").forEach((button, i) => {
+          button.disabled = true;
+          if (saved.selectedMulti?.includes(i)) {
+            button.classList.add("selected", mission.options[i].good ? "good" : "bad");
+          }
+        });
+      }
+
+      if (mission.type === "timeline") {
+        document.querySelectorAll(".mini-btn").forEach(button => button.disabled = true);
+      }
+    }
+
+    function renderMission() {
+      const mission = missions[index];
+      const photo = photos[mission.photo] || photos.p1;
+      const mode = missionModes[mission.type] || missionModes.choice;
+      selected = new Set();
+      answered = false;
+      renderPhoto(photo);
+      tagText.textContent = `第 ${index + 1} 题 · ${mission.category}`;
+      titleText.textContent = mission.title;
+      explainText.textContent = mission.intro;
+      questionText.textContent = mission.q;
+      storyTitle.textContent = `${routeStations[index] || mission.title}站：${mission.title}`;
+      storyText.textContent = categoryPrompts[mission.category] || "完成当前任务，点亮研学路线上的一个节点。";
+      toolkit.innerHTML = `
+        <span class="tool">${mode.name}</span>
+        <span class="tool">${mode.tool}</span>
+        <span class="tool">奖励：${getMissionReward(mission)}</span>
+      `;
+      missionMeta.innerHTML = `
+        <span>任务类型：${mode.name}</span>
+        <span>路线节点：${routeStations[index] || mission.title}</span>
+        <span>通关奖励：${getMissionReward(mission)}</span>
+      `;
+      feedback.textContent = "先观察左侧路线和图片，再完成当前任务。答题后会点亮节点、收集卡片，并获得本关讲解。";
+      task.innerHTML = "";
+      ending.classList.remove("show");
+      endingPrizes.innerHTML = "";
+      introCard.style.display = "block";
+      taskCard.style.display = "block";
+      checkBtn.style.display = "inline-flex";
+      nextBtn.textContent = index === missions.length - 1 ? "生成总结" : "下一题";
+      nextBtn.disabled = !answers[index];
+
+      if (mission.type === "choice") renderChoice(mission);
+      if (mission.type === "multi") renderMulti(mission);
+      if (mission.type === "timeline") renderTimeline(mission);
+      restoreAnsweredState(mission);
+      nextBtn.disabled = !answers[index];
+      updateStats();
+    }
+
+    function showEnding() {
+      const finalPercent = percent();
+      introCard.style.display = "none";
+      taskCard.style.display = "none";
+      checkBtn.style.display = "none";
+      nextBtn.disabled = true;
+      ending.classList.add("show");
+      renderPhoto(photos.p20);
+      storyTitle.textContent = "接力完成：生成研学宣言";
+      storyText.textContent = "你已经走完整条研学路线，可以把收集到的精神火种转化为课堂展示成果。";
+      toolkit.innerHTML = `
+        <span class="tool">${levelName(finalPercent)}</span>
+        <span class="tool">${rawScore} 点精神火种</span>
+        <span class="tool">${unlockedPrizes.size} 张卡片</span>
+      `;
+      endingText.textContent = `本游戏已由普通答题升级为“地图闯关 + 精神火种收集 + 研学护照”的互动体验。玩家沿 20 个红色研学节点推进，完成名词辨析、历史人物竞猜、红色遗址识别、时间线复原和综合判断等任务；每完成一关即可点亮路线、获得精神火种和主题卡片。最终百分制得分 ${finalPercent}，等级为“${levelName(finalPercent)}”。我的红色基因接力宣言：把理想信念落实到日常学习，把人民立场转化为服务意识，把实事求是用于解决问题，把艰苦奋斗变成面对困难时的行动力。`;
+      endingPrizes.innerHTML = [...unlockedPrizes].map(prize => `<div class="ending-prize">${prize}</div>`).join("");
+      feedback.textContent = "闯关完成。左侧研学护照已经记录本次收集成果，结算页可直接用于课堂汇报。";
+      updateStats();
+      progressBar.style.width = "100%";
+    }
+
+    checkBtn.addEventListener("click", checkCurrent);
+    nextBtn.addEventListener("click", () => {
+      if (index < missions.length - 1) {
+        index += 1;
+        renderMission();
+      } else {
+        showEnding();
+      }
+    });
+    restartBtn.addEventListener("click", () => {
+      index = 0;
+      rawScore = 0;
+      done.clear();
+      unlockedPrizes.clear();
+      answers.fill(null);
+      renderMission();
+    });
+
+    renderMission();
+  </script>
+</body>
+</html>
