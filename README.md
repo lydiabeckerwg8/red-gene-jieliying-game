@@ -1,13 +1,13 @@
 # 红色基因接力营
 
-这是一个可以直接托管为网页链接的单文件静态小游戏。入口文件是 `index.html`，不需要安装依赖或后端服务。
+这是一个可以直接托管为网页链接的单文件静态小游戏。入口文件是 `index.html`，不需要安装依赖或后端服务。当前版本已升级为“研学路线图 + 精神火种 + 研学护照 + 主题卡片收集”的地图闯关式互动体验。
 
 ## 当前在线链接
 
-已发布到 PageDrop，可直接访问：
+已发布到 GitHub Pages，可直接访问：
 
 ```text
-https://pagedrop.dev/s/2UwwMmp2/
+https://lydiabeckerwg8.github.io/red-gene-jieliying-game/
 ```
 
 ## 在线发布
